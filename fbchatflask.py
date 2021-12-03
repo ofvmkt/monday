@@ -1,41 +1,86 @@
+from flask import Flask, request
 import requests
 import json
 import os
-from flask import Flask
-
 
 app = Flask(__name__)
 
-apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjEzMzc5NzAwNSwidWlkIjoyNTcwNTgwMSwiaWFkIjoiMjAyMS0xMS0xOVQwNTo1MzozMi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MTAzMjgyNTQsInJnbiI6InVzZTEifQ.-8q9zCVz8ndYtBMdFK95vYxxPIf_6BIre3cMNs6jaIY"
-apiUrl = "https://api.monday.com/v2"
-headers = {"Authorization" : apiKey}
+FB_API_URL = 'https://graph.facebook.com/v2.6/me/messages'
+VERIFY_TOKEN='fbchatflask.herokuapp.com'
+PAGE_ACCESS_TOKEN='EAArn4v5eqR4BABhrAstWGWFT1KO4CdxPki0Sm7RJRETUrMPNhUX17n8gfXmCu9XZB4gIjlTk1ZBT0HlPTGabt7Yr3RQhztZCops6DhKCc680J9Ya4EmMcjrt5BTSK8Vown1640BbRMvxblupmDgNbppsiCRIVQtkBbpT0ajcrlTnoTh3lD98dbiWFvmPasZD'
 
-query = """
-        {
-            items_by_column_values ( 
-                board_id: 1946804760, 
-                column_id: \"text\", 
-                column_value: \"%s\") {
-                        name
-                        id
-                        column_values (ids:[\"message\"]){
-                            text
-                        }
-                }
-        }
-        """ %str('5051764778186636')
-        
-data = {'query' : query}
-r = requests.post(url=apiUrl, json=data, headers=headers)
-x = json.dumps(r.text)
+def send_message(recipient_id, text):
+    """Send a response to Facebook"""
+    payload = {
+        'message': {
+            'text': text
+        },
+        'recipient': {
+            'id': recipient_id
+        },
+        'notification_type': 'regular'
+    }
 
-print(x)
+    auth = {
+        'access_token': PAGE_ACCESS_TOKEN
+    }
+
+    response = requests.post(
+        FB_API_URL,
+        params=auth,
+        json=payload
+    )
+
+    return response.json()
+
+def get_bot_response(message):
+    """This is just a dummy function, returning a variation of what
+    the user said. Replace this function with one connected to chatbot."""
+    return "This is a dummy response to '{}'".format(message)
 
 
+def verify_webhook(req):
+    if req.args.get("hub.verify_token") == VERIFY_TOKEN:
+        return req.args.get("hub.challenge")
+    else:
+        return "incorrect"
+
+def respond(sender, message):
+    """Formulate a response to the user and
+    pass it on to a function that sends it."""
+    response = get_bot_response(message)
+    """send_message(sender, response)"""
+
+
+def is_user_message(message):
+    """Check if the message is a message from the user"""
+    return (message.get('message') and
+            message['message'].get('text') and
+            not message['message'].get("is_echo"))
+
+
+@app.route("/webhook", methods=['GET'])
+def listen():
+    """This is the main function flask uses to
+    listen at the `/webhook` endpoint"""
+    if request.method == 'GET':
+        return verify_webhook(request)
+
+@app.route("/webhook", methods=['POST'])
+def talk():
+    payload = request.get_json()
+    event = payload['entry'][0]['messaging']
+    for x in event:
+        if is_user_message(x):
+            text = x['message']['text']
+            sender_id = x['sender']['id']
+            respond(sender_id, text)
+
+    return "ok"
 
 @app.route('/')
 def hello():
-    return x
+    return 'hello'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=True, port=5000)
