@@ -6,8 +6,10 @@ import os
 app = Flask(__name__)
 
 FB_API_URL = 'https://graph.facebook.com/v2.6/me/messages'
-VERIFY_TOKEN='fbchatflask.herokuapp.com'
-PAGE_ACCESS_TOKEN='EAArn4v5eqR4BABhrAstWGWFT1KO4CdxPki0Sm7RJRETUrMPNhUX17n8gfXmCu9XZB4gIjlTk1ZBT0HlPTGabt7Yr3RQhztZCops6DhKCc680J9Ya4EmMcjrt5BTSK8Vown1640BbRMvxblupmDgNbppsiCRIVQtkBbpT0ajcrlTnoTh3lD98dbiWFvmPasZD'
+
+PAGE_ACCESS_TOKEN = os.environ['PAGE_ACCESS_TOKEN']
+VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
+
 
 def send_message(recipient_id, text):
     """Send a response to Facebook"""
