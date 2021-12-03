@@ -77,8 +77,11 @@ def talk():
             text = x['message']['text']
             sender_id = x['sender']['id']
             respond(sender_id, text)
-
     return "ok"
+
+@app.route('/privacy')
+def privacy():
+    return 'privacy'
 
 @app.route('/')
 def hello():
