@@ -7,10 +7,9 @@ app = Flask(__name__)
 
 FB_API_URL = 'https://graph.facebook.com/v2.6/me/messages'
 
-PAGE_ACCESS_TOKEN = os.environ['PAGE_ACCESS_TOKEN']
-VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
+PAGE_ACCESS_TOKEN = os.environ.get('PAGE_ACCESS_TOKEN')
+VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
 
-print(VERIFY_TOKEN)
 
 def send_message(recipient_id, text):
     """Send a response to Facebook"""
@@ -83,6 +82,8 @@ def talk():
 
 @app.route('/')
 def hello():
+    print(VERIFY_TOKEN)
+    print(PAGE_ACCESS_TOKEN)
     return 'hello'
 
 if __name__ == '__main__':
