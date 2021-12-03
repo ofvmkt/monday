@@ -82,8 +82,6 @@ def talk():
 
 @app.route('/')
 def hello():
-    print(VERIFY_TOKEN)
-    print(PAGE_ACCESS_TOKEN)
     return 'hello'
 
 if __name__ == '__main__':
