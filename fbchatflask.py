@@ -2,11 +2,12 @@ from flask import Flask, request, abort, jsonify
 from datetime import datetime
 import requests
 import json
-global itmeid, message
+import os
 
 app = Flask(__name__)
+global itmeid, message
 
-apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjEzMzc5NzAwNSwidWlkIjoyNTcwNTgwMSwiaWFkIjoiMjAyMS0xMS0xOVQwNTo1MzozMi4wMDBaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MTAzMjgyNTQsInJnbiI6InVzZTEifQ.-8q9zCVz8ndYtBMdFK95vYxxPIf_6BIre3cMNs6jaIY"
+apiKey = os.environ.get('apiKey', None)
 apiUrl = "https://api.monday.com/v2"
 headers = {"Authorization" : apiKey}
 global itemid, message
