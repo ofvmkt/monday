@@ -7,10 +7,10 @@ import os
 app = Flask(__name__)
 global itmeid, message
 
-apiKey = os.environ.get('apiKey', None)
 apiUrl = "https://api.monday.com/v2"
-headers = {"Authorization" : apiKey}
-global itemid, message
+headers = {"Authorization" : os.environ.get('apiKey')}
+print("헤더 정보 >>> ", headers)
+
 
 def checkID(psid):
     global itemid, message
