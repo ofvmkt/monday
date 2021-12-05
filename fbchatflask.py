@@ -28,7 +28,11 @@ def checkID(psid):
     
 def updateById(message2, time1):
     global itemid, message, apiUrl, headers
+
+    message2 = message2.replace('"','')
+    message2 = message2.replace("'","")
     message21 = f"> {message2}\n{message}"
+    
     time_obj = datetime.strptime(time1.split('.')[0], '%Y-%m-%dT%H:%M:%S')
     time3 = time_obj.strftime('%Y-%m-%d')
     
@@ -47,7 +51,11 @@ def updateById(message2, time1):
 
 def createNew(name, message1, psid, time1):
     global apiUrl, headers
+
+    message1 = message1.replace('"','')
+    message1 = message1.replace("'","")
     message1 = f"> {message1}"
+    
     time_obj = datetime.strptime(time1.split('.')[0], '%Y-%m-%dT%H:%M:%S')
     time3 = time_obj.strftime('%Y-%m-%d')
     
