@@ -9,8 +9,6 @@ global itmeid, message, apiUrl, headers
 
 apiUrl = "https://api.monday.com/v2"
 headers = {"Authorization" : os.environ.get('apiKey')}
-print("헤더 정보 >>> ", headers)
-
 
 def checkID(psid):
     global itemid, message, apiUrl, headers
@@ -29,11 +27,9 @@ def checkID(psid):
 def updateById(message2, time1):
     global itemid, message, apiUrl, headers
 
-    message2 = message2.replace('"','')
-    message2 = message2.replace("'","")
     message21 = f"> {message2}\n{message}"
     
-    time_obj = datetime.strptime(time1.split('.')[0], '%Y-%m-%dT%H:%M:%S')
+    time_obj = datetime.strptime(time1.split('T')[0], '%Y-%m-%d')
     time3 = time_obj.strftime('%Y-%m-%d')
     
     query = 'mutation ($myItemId: Int!, $columnVals: JSON!) { change_multiple_column_values (board_id:1946804760, item_id:$myItemId,  column_values:$columnVals ) { id } }'
@@ -52,11 +48,9 @@ def updateById(message2, time1):
 def createNew(name, message1, psid, time1):
     global apiUrl, headers
 
-    message1 = message1.replace('"','')
-    message1 = message1.replace("'","")
     message1 = f"> {message1}"
     
-    time_obj = datetime.strptime(time1.split('.')[0], '%Y-%m-%dT%H:%M:%S')
+    time_obj = datetime.strptime(time1.split('T')[0], '%Y-%m-%d')
     time3 = time_obj.strftime('%Y-%m-%d')
     
     query = 'mutation ($myItemName: String!, $columnVals: JSON!) { create_item (board_id:1946804760, item_name:$myItemName, column_values:$columnVals) { id } }'
