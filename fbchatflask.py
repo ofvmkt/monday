@@ -29,13 +29,14 @@ def updateById(message2, time1):
 
     message21 = f"> {message2}\n{message}"
     
-    time_obj = datetime.strptime(time1.split('T')[0], '%Y-%m-%d')
-    time3 = time_obj.strftime('%Y-%m-%d')
+    utcdatetime = datetime.strptime(time1, '%Y-%m-%dT%H:%M:%S.%fZ')
+    localdate = utcdatetime.strftime('%Y-%m-%d')
+    localtime = utcdatetime.strftime('%H:%M:%S')
     
     query = 'mutation ($myItemId: Int!, $columnVals: JSON!) { change_multiple_column_values (board_id:1946804760, item_id:$myItemId,  column_values:$columnVals ) { id } }'
     vars = {
              'myItemId' : int(itemid),
-             'columnVals' : json.dumps({'message' : message21, '__' : {'label' : 'Talking'}, 'time'   : {'date' : time3}})
+             'columnVals' : json.dumps({'message' : message21, '__' : {'label' : 'Talking'}, 'time'   : {'date' : localdate, 'time' : localtime}})
             }
         
     data = {'query' : query, 'variables' : vars}
@@ -50,13 +51,14 @@ def createNew(name, message1, psid, time1):
 
     message1 = f"> {message1}"
     
-    time_obj = datetime.strptime(time1.split('T')[0], '%Y-%m-%d')
-    time3 = time_obj.strftime('%Y-%m-%d')
+    utcdatetime = datetime.strptime(time1, '%Y-%m-%dT%H:%M:%S.%fZ')
+    localdate = utcdatetime.strftime('%Y-%m-%d')
+    localtime = utcdatetime.strftime('%H:%M:%S')
     
     query = 'mutation ($myItemName: String!, $columnVals: JSON!) { create_item (board_id:1946804760, item_name:$myItemName, column_values:$columnVals) { id } }'
     vars = {
              'myItemName' : name,
-             'columnVals' : json.dumps({'message' : message1, '__' : {'label' : 'Start'}, 'time' : {'date' : time3}, 'text': psid })
+             'columnVals' : json.dumps({'message' : message1, '__' : {'label' : 'Start'}, 'time' : {'date' : localdate, 'time' : localtime}, 'text': psid })
             }
     data = {'query' : query, 'variables' : vars}
     r = requests.post(url=apiUrl, json=data, headers=headers) # make request
