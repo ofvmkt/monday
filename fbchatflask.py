@@ -5,7 +5,7 @@ import json
 import os
 
 app = Flask(__name__)
-global itmeid, message
+global itmeid, message, apiUrl, headers
 
 apiUrl = "https://api.monday.com/v2"
 headers = {"Authorization" : os.environ.get('apiKey')}
@@ -13,7 +13,7 @@ print("헤더 정보 >>> ", headers)
 
 
 def checkID(psid):
-    global itemid, message
+    global itemid, message, apiUrl, headers
     query = 'query ($myColumnPsId: String!) { items_by_column_values (board_id:1946804760, column_id:"text",  column_value:$myColumnPsId ) { id name column_values (ids:["message"]){text} } }'
     vars = {'myColumnPsId' : psid}
     data = {'query' : query, 'variables' : vars}
@@ -27,7 +27,7 @@ def checkID(psid):
     return n
     
 def updateById(message2, time1):
-    global itemid, message
+    global itemid, message, apiUrl, headers
     message21 = f"> {message2}\n{message}"
     time_obj = datetime.strptime(time1.split('.')[0], '%Y-%m-%dT%H:%M:%S')
     time3 = time_obj.strftime('%Y-%m-%d')
@@ -46,6 +46,7 @@ def updateById(message2, time1):
 
 
 def createNew(name, message1, psid, time1):
+    global apiUrl, headers
     message1 = f"> {message1}"
     time_obj = datetime.strptime(time1.split('.')[0], '%Y-%m-%dT%H:%M:%S')
     time3 = time_obj.strftime('%Y-%m-%d')
@@ -58,6 +59,7 @@ def createNew(name, message1, psid, time1):
     data = {'query' : query, 'variables' : vars}
     r = requests.post(url=apiUrl, json=data, headers=headers) # make request
     j = r.json()
+    print("신규 쿼리 점검 >>>", r)
     print("신규 대화 오픈 >>> ", j['data']['create_item']['id'])
     return 'success', 100
 
