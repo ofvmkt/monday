@@ -12,13 +12,19 @@ apiUrl = "https://api.monday.com/v2"
 headers = {"Authorization" : os.environ.get('apiKey')}
 
 def checkLast(psid):
-    lastid = os.environ["LASTID"]
-    if lastid != None and lastid == psid:
-        os.environ["LASTID"] = psid
-        return true
+    
+    if 'LASTID' in os.environ:
+        lastid = os.environ["LASTID"]
+        print("check last id >>> ", lastid)
+        
+        if str(lastid) == str(psid):
+            os.environ["LASTID"] = str(psid)
+            return true
+        else:
+            os.environ["LASTID"] = str(psid)
+            return false
     else:
-        os.environ["LASTID"] = psid
-        return false
+        os.environ["LASTID"] = str(psid)
 
 def checkID(psid):
     global itemid, message, apiUrl, headers
