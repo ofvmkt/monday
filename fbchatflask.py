@@ -1,5 +1,6 @@
 from flask import Flask, request, abort, jsonify
 from datetime import datetime
+import time
 import requests
 import json
 import os
@@ -9,6 +10,15 @@ global itmeid, message, apiUrl, headers
 
 apiUrl = "https://api.monday.com/v2"
 headers = {"Authorization" : os.environ.get('apiKey')}
+
+def checkLast(psid):
+    lastid = os.environ["LASTID"]
+    if  lastid != "" AND lastid == psid
+        os.environ["LASTID"] = psid
+        return true
+    else
+        os.environ["LASTID"] = psid
+        return false
 
 def checkID(psid):
     global itemid, message, apiUrl, headers
@@ -76,12 +86,16 @@ def webhook():
         fb_psid = content['fb_psid']        
         fb_time = content['fb_time']
         
-        if checkID(fb_psid) == 0 :
-            createNew(fb_name, fb_message, fb_psid, fb_time)
-        elif checkID(fb_psid) == 1 :
+        if checkLast(fb_psid):
+            time.sleep(3)
             updateById(fb_message, fb_time)
         else:
-            return 'fail', 300
+            if checkID(fb_psid) == 0 :
+                createNew(fb_name, fb_message, fb_psid, fb_time)
+            elif checkID(fb_psid) == 1 :
+                updateById(fb_message, fb_time)
+            else:
+                return 'fail', 300
 
         return 'success', 200
     else:
