@@ -13,10 +13,10 @@ headers = {"Authorization" : os.environ.get('apiKey')}
 
 def checkLast(psid):
     lastid = os.environ["LASTID"]
-    if lastid != "" AND lastid == psid
+    if lastid != "" AND lastid == psid:
         os.environ["LASTID"] = psid
         return true
-    else
+    else:
         os.environ["LASTID"] = psid
         return false
 
