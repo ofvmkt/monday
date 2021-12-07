@@ -11,18 +11,17 @@ global itmeid, message, apiUrl, headers
 apiUrl = "https://api.monday.com/v2"
 headers = {"Authorization" : os.environ.get('apiKey')}
 
-def checkLast(psid):
-    
+def checkLast(psid):   
     if 'LASTID' in os.environ:
         lastid = os.environ["LASTID"]
         print("check last id >>> ", lastid)
         
         if str(lastid) == str(psid):
             os.environ["LASTID"] = str(psid)
-            return true
+            return True
         else:
             os.environ["LASTID"] = str(psid)
-            return false
+            return False
     else:
         os.environ["LASTID"] = str(psid)
 
