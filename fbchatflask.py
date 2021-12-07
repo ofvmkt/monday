@@ -92,7 +92,9 @@ def webhook():
         fb_time = content['fb_time']
         
         if checkLast(fb_psid):
-            time.sleep(3)
+            time.sleep(2)
+            checkID(fb_psid)
+            time.sleep(2)
             updateById(fb_message, fb_time)
         else:
             if checkID(fb_psid) == 0 :
