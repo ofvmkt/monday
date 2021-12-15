@@ -33,6 +33,7 @@ def checkID(psid):
     r = requests.post(url=apiUrl, json=data, headers=headers) # make request
     j = r.json()
     n = len(j['data']['items_by_column_values'])
+    print("len(items_by_column_values) >>> ", n)
     if n > 0 :
         itemid = j['data']['items_by_column_values'][0]['id']
         message = j['data']['items_by_column_values'][0]['column_values'][0]['text']
@@ -93,9 +94,8 @@ def webhook():
         
         if checkLast(fb_psid):
             time.sleep(2)
-            checkID(fb_psid)
-            time.sleep(2)
-            updateById(fb_message, fb_time)
+            if checkID(fb_psid) == 1 :
+                updateById(fb_message, fb_time)
         else:
             if checkID(fb_psid) == 0 :
                 createNew(fb_name, fb_message, fb_psid, fb_time)
