@@ -11,7 +11,7 @@ global itmeid, message, apiUrl, headers
 apiUrl = "https://api.monday.com/v2"
 headers = {"Authorization" : os.environ.get('apiKey')}
 
-print("프로세스 PID >>> "os.getpid())
+print("프로세스 PID >>> ", os.getpid())
 
 def checkLast(psid):   
     if 'LASTID' in os.environ:
